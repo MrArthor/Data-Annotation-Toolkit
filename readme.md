@@ -1,4 +1,4 @@
-````markdown
+
 # Data Annotation Toolkit
 
 A comprehensive toolkit designed to streamline the data annotation process for machine learning and data science projects. This repository provides Python-based utilities to manage, process, and label datasets efficiently.
@@ -65,5 +65,4 @@ app.process_directory("data/raw/")
 
 This project is licensed under the MIT License - see the [LICENSE](https://www.google.com/search?q=LICENSE) file for details.
 
-```
-```
+
