@@ -1,6 +1,6 @@
 import os
 
-label_dir = '/home/vansh/Desktop/Code/Architecture/x86/Helmet_Detection_Model/Frames_And_Videos/Dataset/face.v1i.yolov8/train/labels'
+label_dir = '/home/vansh/Desktop/Code/Architecture/x86/Helmet_Detection_Model/Frames_And_Videos/Dataset/Turban.yolov8/train/labels'
 mapping = {'0': '2'}
 
 for label_file in os.listdir(label_dir):

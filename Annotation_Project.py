@@ -7,7 +7,8 @@ import torch
 import re
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QPushButton, QVBoxLayout,
                              QHBoxLayout, QWidget, QLabel, QFileDialog, QMessageBox,
-                             QScrollArea, QRadioButton, QButtonGroup, QSizePolicy, QAction, QSlider)
+                             QScrollArea, QRadioButton, QButtonGroup, QSizePolicy, QAction, QSlider,
+                             QInputDialog)
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtCore import Qt, QPoint, QTimer
 import copy
@@ -206,6 +207,12 @@ class FolderAnnotationTool(QMainWindow):
         undo_act.setShortcut("Ctrl+Z")
         undo_act.triggered.connect(self.undo)
         edit_menu.addAction(undo_act)
+
+        nav_menu = menubar.addMenu("Navigation")
+        goto_act = QAction("Go to Frame  (G)", self)
+        goto_act.setShortcut("G")
+        goto_act.triggered.connect(self.goto_frame)
+        nav_menu.addAction(goto_act)
 
     def initUI(self):
         self.central_widget = QWidget()
@@ -447,6 +454,23 @@ class FolderAnnotationTool(QMainWindow):
             self.current_idx += 1
             self.load_image()
 
+    def goto_frame(self):
+        if not self.image_paths:
+            QMessageBox.warning(self, "Warning", "No images loaded. Load a folder first.")
+            return
+        total_frames = len(self.image_paths)
+        frame_num, ok = QInputDialog.getInt(
+            self, "Go to Frame",
+            f"Enter frame number (1-{total_frames}):",
+            self.current_idx + 1,
+            1,
+            total_frames,
+            1
+        )
+        if ok:
+            self.current_idx = frame_num - 1
+            self.load_image()
+
     def delete_frame(self):
         if not (0 <= self.current_idx < len(self.image_paths)):
             return
@@ -500,6 +524,8 @@ class FolderAnnotationTool(QMainWindow):
             self.init_model()
         elif k == Qt.Key_C:
             self.load_classes()
+        elif k == Qt.Key_G:
+            self.goto_frame()
         elif k == Qt.Key_BracketLeft:
             self.thresh_slider.setValue(max(0, self.thresh_slider.value() - 5))
         elif k == Qt.Key_BracketRight:

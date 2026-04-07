@@ -93,14 +93,17 @@ Annotation_Script/
 ├── Annotated_Frames_And_Export_Video.py    # Main automated annotation script
 ├── Annotation_Project.py                    # GUI annotation tool
 ├── Test_And_Export_Videos.py                # Video testing & export
+├── Test_And_Export_Images.py                # Image testing & export
 ├── Class_Distribution_Count_In Annotated_Frames.py  # Class analysis
 ├── Weights_Of_Each_Class.py                 # Weight calculation
 ├── Update_Labels_txt_Mapping.py             # Label management
 ├── readme.md                                # This file
 └── [Output directories created during execution]
     ├── annotated_frames/                    # Exported frame images
+    ├── annotated_images/                    # Annotated output images
     ├── labels/                              # Frame labels (YOLO format)
-    └── output_videos/                       # Generated annotated videos
+    ├── output_videos/                       # Generated annotated videos
+    └── output_images/                       # Generated annotated images
 ```
 
 ## Detailed Script Documentation
@@ -234,7 +237,65 @@ OUTPUT_CODEC = "mp4v"  # or "XVID" for .avi
 
 ---
 
-### 4. Class_Distribution_Count_In Annotated_Frames.py
+### 4. Test_And_Export_Images.py
+
+**Purpose:** Tests trained YOLO models on image files/photos, generates annotated output images, and creates comprehensive detection statistics.
+
+**Key Features:**
+- Batch image processing from directory or glob patterns
+- Supports multiple image formats (JPG, PNG, BMP, TIFF, WebP)
+- Generates annotated images with bounding boxes
+- Detailed JSON statistics with detection results
+- Class distribution analysis
+- Image dimensions tracking
+- Recursive directory scanning
+
+**Usage:**
+
+```bash
+python Test_And_Export_Images.py
+```
+
+**Configuration:**
+
+```python
+INPUT_PATH = "path/to/images/"  # Directory, glob pattern, or single file
+OUTPUT_DIR = "output_images/"
+MODEL_PATH = "models/best.pt"
+CONFIDENCE = 0.5
+SAVE_ANNOTATED = True  # Save annotated images
+SAVE_STATS = True      # Save statistics
+```
+
+**Input Options:**
+- Directory path: `"images/"` - processes all supported image formats recursively
+- Glob pattern: `"images/**/*.jpg"` - processes images matching pattern
+- Single file: `"image.png"` - processes single image
+
+**Output Files:**
+- `annotated/` - Directory containing annotated images with detections
+- `detection_statistics.json` - Summary statistics
+- `detailed_detections.json` - Per-image detection details
+
+**Output Example:**
+
+```json
+{
+  "total_images": 150,
+  "total_detections": 342,
+  "images_with_detections": 128,
+  "average_detections_per_image": 2.28,
+  "class_distribution": {
+    "car": 156,
+    "person": 128,
+    "truck": 58
+  }
+}
+```
+
+---
+
+### 5. Class_Distribution_Count_In Annotated_Frames.py
 
 **Purpose:** Analyzes the distribution of object classes across annotated frames, providing statistical insights for dataset balance assessment.
 
@@ -440,6 +501,22 @@ Each frame has a corresponding `.txt` file with one annotation per line:
 4. Adjust confidence threshold if needed
 5. Compare with ground truth annotations
 
+### Workflow 5: Image-Based Model Testing
+
+1. Prepare test images in a directory:
+   ```bash
+   mkdir test_images/
+   cp *.jpg test_images/
+   ```
+2. Run model on test images:
+   ```bash
+   python Test_And_Export_Images.py
+   ```
+3. Review annotated output images in `output_images/annotated/`
+4. Check detection statistics in `detection_statistics.json`
+5. Analyze class distribution across images
+6. Compare results with other models or ground truth
+
 ---
 
 ## Configuration
@@ -604,7 +681,49 @@ python Annotation_Project.py
 python Test_And_Export_Videos.py
 ```
 
-### Example 2: Dataset Configuration (data.yaml)
+### Example 2: Batch Image Testing
+
+```bash
+# Test a directory of images
+python Test_And_Export_Images.py
+
+# Output structure:
+# output_images/
+# ├── annotated/                    # Annotated images
+# ├── detection_statistics.json     # Summary stats
+# └── detailed_detections.json      # Per-image details
+```
+
+**Programmatic Usage:**
+
+```python
+from Test_And_Export_Images import process_images
+
+process_images(
+    input_path='test_images/**/*.jpg',      # Glob pattern
+    output_dir='results/',
+    model_path='models/best.pt',
+    save_annotated=True,
+    save_stats=True
+)
+```
+
+### Example 3: Compare Video vs Image Testing
+
+```bash
+# Test on video
+python Test_And_Export_Videos.py
+# Output: Single video with annotations
+
+# Test on video's extracted frames
+python Annotated_Frames_And_Export_Video.py  # Extract frames
+python Test_And_Export_Images.py            # Test frames as images
+# Output: Individual frame images + statistics
+```
+
+---
+
+## Dataset Configuration (data.yaml)
 
 ```yaml
 path: /path/to/dataset
