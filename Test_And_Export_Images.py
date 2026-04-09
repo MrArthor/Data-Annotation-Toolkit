@@ -378,7 +378,7 @@ def main():
     # Example usage - modify these paths as needed
     input_path = 'Architecture/x86/Helmet_Detection_Model/Frames_And_Videos/Edge_Cases'  # Directory or glob pattern
     output_dir = 'Architecture/x86/Helmet_Detection_Model/Frames_And_Videos/Output_Images/'
-    model_path = 'Architecture/x86/Helmet_Detection_Model/Models/Yolov8n/05042026_Yolov8n_160_Epochs/weights/best.pt'
+    model_path = 'Architecture/x86/Helmet_Detection_Model/Models/Yolov8n/08042026_Yolov8n_Final/weights/best.pt'
     
     try:
         process_images(
