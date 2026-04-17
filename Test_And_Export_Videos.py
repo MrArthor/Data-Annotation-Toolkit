@@ -269,8 +269,8 @@ def process_video(input_path, output_path, model_path, verbose=True):
 def main():
     """Main entry point for script execution."""
     # Example usage
-    input_video = 'Architecture/x86/PPE_Detection/Frames_Videos/VIdeos/27.mp4'
-    output_video = 'Architecture/x86/PPE_Detection/Frames_Videos/Output_Videos/27032026_yolov8n/27_output.mp4'
+    input_video = 'Architecture/x86/PPE_Detection/Frames_Videos/VIdeos/19.mp4'
+    output_video = 'Architecture/x86/PPE_Detection/Frames_Videos/Output_Videos/27032026_yolov8n/19_output.mp4'
     model_path = 'Architecture/x86/PPE_Detection/Models/Yolov8n/27032026_yolov8n/weights/best.pt'
     
     try:
